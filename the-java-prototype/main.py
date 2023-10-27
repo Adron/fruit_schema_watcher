@@ -1,3 +1,5 @@
+import datetime
+
 from pymongo import MongoClient
 
 
@@ -22,11 +24,21 @@ if __name__ == "__main__":
     client = MongoClient('mongodb://root:examplepass@localhost:27017')
     db = client['test']
 
+    start_time = datetime.datetime.now()
+    print(f"Process started at: {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+
     # Fetch collections and their properties
     result = fetch_collections_and_properties(db)
     for collection, properties in result.items():
         print(f"Collection: {collection}")
         print(f"Properties: {', '.join(properties)}\n")
 
+    # update GraphQL Server here.
+
     # Close the connection
     client.close()
+
+    end_time = datetime.datetime.now()
+    print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    time_elapsed = end_time - start_time
+    print(f"Time elapsed: {time_elapsed}")
