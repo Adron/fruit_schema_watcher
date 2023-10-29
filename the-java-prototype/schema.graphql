@@ -1,0 +1,17 @@
+# This is the root schema definition
+schema {
+  query: Query
+}
+
+# The root query type
+type Query {
+  hello: String
+  user: User
+}
+
+# A simple User type
+type User {
+  id: ID!
+  name: String!
+  email: String!
+}
