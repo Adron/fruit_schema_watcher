@@ -22,14 +22,12 @@ class FiveSecondService:
             start_time = time.time()
             self.execute_code()
 
-            # Calculate the time left to sleep, accounting for potential variations
-            # in how long the code execution took.
             elapsed_time = time.time() - start_time
             time_to_sleep = max(0, 5 - elapsed_time)
             time.sleep(time_to_sleep)
 
     def execute_code(self):
-        """The code you want to execute every 5 seconds."""
+        # This is the part that runs every 5 seconds.
         the_deluge()
         print("Code executed at:", time.strftime('%Y-%m-%d %H:%M:%S'))
 

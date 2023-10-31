@@ -2,7 +2,6 @@ from word_generator import generate_readable_word
 from word_generator import random_collection_collateral
 from pymongo import MongoClient
 
-
 def the_deluge_of_chaos():
     mongo_collection = generate_readable_word(5)
     collection_document = random_collection_collateral()

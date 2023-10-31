@@ -22,7 +22,6 @@ def generate_readable_word(length):
 
     return word
 
-
 def random_collection_collateral():
     collection_columns = []
     number_of_columns = random.randint(1, 10)

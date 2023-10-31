@@ -1,37 +1,27 @@
-from aiohttp import web
-from graphql import (
-    GraphQLObjectType,
-    GraphQLField,
-    GraphQLString,
-    GraphQLSchema
-)
-from aiohttp_graphql import GraphQLView
+from flask import Flask
+from flask_graphql import GraphQLView
+import graphene
+from pymongo import MongoClient
 
-# Define the GraphQL type for the query
-QueryType = GraphQLObjectType(
-    name='Query',
-    fields={
-        'hello': GraphQLField(
-            GraphQLString,
-            resolve=lambda obj, info: "world"
-        )
-    }
-)
+app = Flask(__name__)
 
-# Create the GraphQL schema with the defined type
-schema = GraphQLSchema(query=QueryType)
+# Connect to the MongoDB instance
+client = MongoClient('mongodb://root:examplepass@localhost:27017')
+db = client['test']
 
-# Create the aiohttp web application
-app = web.Application()
+class Query(graphene.ObjectType):
+    special_message = graphene.String()
 
-# Setup the GraphQL endpoint
-GraphQLView.attach(
-    app,
-    schema=schema,
-    graphiql=True,  # Enables the GraphiQL IDE
-    path="/graphql"
-)
+    def resolve_special_message(self, info):
+        # Fetch the message from the MongoDB collection
+        document = db.the_hello_world_collection.find_one()
+        if document:
+            return document.get('special_message')
+        return "Message not found"
 
-# Run the aiohttp web server
+schema = graphene.Schema(query=Query)
+
+app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+
 if __name__ == '__main__':
-    web.run_app(app, port=4000)
+    app.run(debug=True)
